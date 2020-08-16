@@ -1,0 +1,11 @@
+{
+    "name": "atsomeone",
+    "version": "6.9",
+    "description": "Mentions someone when you send @someone",
+    "main": "bot.js",
+    "author": "xXxYOLOSWAGMEISTER420xXx",
+    "dependencies": {
+        "discord.js": "^12.2.0",
+        "winston": "^3.3.3"
+    }
+}

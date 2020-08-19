@@ -26,6 +26,8 @@ client.on("message", message => {
             console.log(message);
             console.log("At someone detected!");
             getRandomIDFromMessage(message).then( randomID => 
+
+                //Uncomment the next bit and it'll actually mention people instead of spitting out an ID
                 //message.channel.send("<@"+(randomID)+">")
                 message.channel.send(randomID)
             );

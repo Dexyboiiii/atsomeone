@@ -1,6 +1,17 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
+async function getRandomIDFromMessage(message) {
+    try {
+        var members = await message.guild.members.fetch();
+        let userIDs = members.keyArray();
+        var randomID = userIDs[Math.floor(Math.random()*userIDs.length)];
+        return randomID;
+    } catch (e) {
+        console.log("oof" + e);
+    }
+}
+
 client.once('ready', () => {
 	console.log('Ready!');
 });
@@ -12,11 +23,10 @@ client.on("message", message => {
         try {
             console.log(message);
             console.log("At someone detected!");
-            var currentGuild = message.guild;
-            var guildMembers = currentGuild.members.fetch();
-            console.log(guildMembers);
-            // var randomGuildMember = guildMembers[Math.floor(Math.random() * currentGuild.memberCount)];
-            // console.log(randomGuildMember);
+            getRandomIDFromMessage(message).then( randomID => 
+                message.channel.send("<@"+(randomID)+">")
+            );
+            console.log(randomID);
         } catch (error) {
             console.log(error);
         }

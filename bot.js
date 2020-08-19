@@ -16,7 +16,7 @@ client.once('ready', () => {
 	console.log('Ready!');
 });
 
-client.login('NzQzNTQzOTUyMjAzOTcyNjI5.XzWNRA.NRQE8tIrEK3CJb11ilk0TOzBqeY');
+client.login('Discord already sent me an auto message saying they found the key on my repo. Not making that dumb mistake again');
 
 client.on("message", message => {
     if (message.content.includes("@someone")) {

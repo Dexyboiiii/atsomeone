@@ -13,6 +13,23 @@ async function getRandomIDFromMessage(message) {
     }
 }
 
+/**
+ * @param {message} message - The message object
+ * @param {boolean} actuallyMention - 1 actually mentions the user, 0 prints their ID
+ */
+function atSomeoneMessage(message, actuallyMention) {
+    console.log("At someone detected! Will actually mention them: " + actuallyMention);
+    if (actuallyMention) {
+        getRandomIDFromMessage(message).then( randomID => 
+            message.channel.send("<@"+(randomID)+">")
+        );
+    } else {
+        getRandomIDFromMessage(message).then( randomID => 
+            message.channel.send("I'd mention " + randomID + " but that'd be annoying, wouldn't it?")
+        );
+    }
+}
+
 client.once('ready', () => {
 	console.log('Ready!');
 });
@@ -23,15 +40,7 @@ client.login(auth.token);
 client.on("message", message => {
     if (message.content.includes("@someone")) {
         try {
-            console.log(message);
-            console.log("At someone detected!");
-            getRandomIDFromMessage(message).then( randomID => 
-
-                //Uncomment the next bit and it'll actually mention people instead of spitting out an ID
-                //message.channel.send("<@"+(randomID)+">")
-                message.channel.send(randomID)
-            );
-            console.log(randomID);
+            atSomeoneMessage(message, false);
         } catch (error) {
             console.log(error);
         }

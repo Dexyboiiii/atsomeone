@@ -6,6 +6,7 @@
     "author": "xXxYOLOSWAGMEISTER420xXx",
     "dependencies": {
         "discord.js": "^12.2.0",
+        "fs": "0.0.1-security",
         "winston": "^3.3.3"
     }
 }

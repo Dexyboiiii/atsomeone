@@ -1,7 +1,8 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const auth = require('./auth.json');
-var optedIn = [];
+const fs = require('fs');
+var optedIn = {};
 
 async function getRandomIDFromMessage(message) {
     try {
@@ -21,11 +22,11 @@ async function getRandomIDFromMessage(message) {
 function atSomeoneMessage(message, actuallyMention) {
     console.log("At someone detected! Will actually mention them: " + actuallyMention);
     if (actuallyMention) {
-        getRandomIDFromMessage(message).then( randomID => 
-            message.channel.send("<@"+(randomID)+">")
+        getRandomIDFromMessage(message).then(randomID =>
+            message.channel.send("<@" + (randomID) + ">")
         );
     } else {
-        getRandomIDFromMessage(message).then( randomID => 
+        getRandomIDFromMessage(message).then(randomID =>
             message.channel.send("I'd mention " + randomID + " but that'd be annoying, wouldn't it?")
         );
     }
@@ -40,15 +41,16 @@ function optSomeoneIn(guildID, authorID) {
             let authorIDIndex = optedIn[i][1].indexOf(authorID);
             if (authorIDIndex != -1) {
                 optedIn[i][1].push(authorID);
-                return;
+                return "Opted in!";
             } else {
                 delete optedIn[i][1][authorIDIndex];
+                return "Opted out!";
             }
-            
+
         }
     }
     optedIn.push([guildID, [authorID]]);
-    return;
+    return "Server added and opted in!";
 }
 
 client.once('ready', () => {

@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const auth = require('./auth.json');
 const fs = require('fs');
-var optedIn = {};
+var optedIn = [];
 
 async function getRandomIDFromMessage(message) {
     try {
@@ -39,18 +39,35 @@ function optSomeoneIn(guildID, authorID) {
         if (optedIn[i][0] == guildID) {
             // Find the authorID in the array. If it's not there, put it in. If it is, remove it.
             let authorIDIndex = optedIn[i][1].indexOf(authorID);
-            if (authorIDIndex != -1) {
+            if (authorIDIndex == -1) {
                 optedIn[i][1].push(authorID);
+                console.log(optedIn);
+                fs.writeFileSync("./atsomeoneable.json", JSON.stringify(optedIn));
                 return "Opted in!";
             } else {
                 delete optedIn[i][1][authorIDIndex];
+                fs.writeFileSync("./atsomeoneable.json", JSON.stringify(optedIn));
                 return "Opted out!";
             }
 
         }
     }
     optedIn.push([guildID, [authorID]]);
+    fs.writeFileSync("./atsomeoneable.json", JSON.stringify(optedIn));
     return "Server added and opted in!";
+}
+
+// Searches through optedIn for the guild the message was sent from, and then lists all users from that guild who've opted in.
+function outputAllOptedIn(guildID) {
+    for (let i = 0; i < optedIn.length; i++) {
+        if (optedIn[i][0] == guildID) {
+            let messageToSend = "People opted in:\n";
+            for (let j = 0; j < optedIn[i].length; j++) {
+                const userID = optedIn[i][j];
+                messageToSend += userID + "\n";
+            }
+        }
+    }
 }
 
 client.once('ready', () => {
@@ -70,7 +87,7 @@ client.on("message", message => {
         }
     } else if (message.content.includes("@someone-optin")) {
         try {
-            optSomeoneIn(message.guild.id, message.author.id);
+            message.channel.send(optSomeoneIn(message.guild.id, message.author.id));
             console.log(optedIn);
         } catch (error) {
             console.log(error);
